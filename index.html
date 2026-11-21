@@ -1,0 +1,61 @@
+---
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contributor Wall · HackJam '26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+
+<header>
+  <img class="logo" src="assets/hackjam26-words.webp" alt="HackJam '26" width="2000" height="447">
+  <h1>Welcome to HackJam!</h1>
+  {% assign people = site.contributors %}
+  {% assign count = 0 %}{% for p in people %}{% if p.name %}{% assign count = count | plus: 1 %}{% endif %}{% endfor %}
+  <p class="sub">{{ count }} {% if count == 1 %}person has{% else %}people have{% endif %} contributed to this repo. Open a pull request to add yourself.</p>
+</header>
+
+<div class="controls">
+  <button id="pick" type="button">Pick someone</button>
+  <p id="picked" class="picked-name" aria-live="polite"></p>
+</div>
+
+<ul class="wall">
+  {% for p in people %}{% if p.name %}
+  <li class="card">
+    <span class="name">{{ p.name | escape }}</span>
+    {% if p.github and p.github != "" %}<a class="handle" href="https://github.com/{{ p.github | escape }}">@{{ p.github | escape }}</a>{% endif %}
+    {% if p.school and p.school != "" %}<span class="school">{{ p.school | escape }}</span>{% endif %}
+    {% if p.message and p.message != "" %}<span class="message">{{ p.message | escape }}</span>{% endif %}
+  </li>
+  {% endif %}{% endfor %}
+</ul>
+
+</main>
+<script>
+  var button = document.getElementById('pick');
+  var output = document.getElementById('picked');
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  var last = -1;
+
+  button.addEventListener('click', function () {
+    if (!cards.length) return;
+    var i;
+    do { i = Math.floor(Math.random() * cards.length); } while (cards.length > 1 && i === last);
+    last = i;
+    cards.forEach(function (c) { c.classList.remove('is-picked'); });
+    var card = cards[i];
+    card.classList.add('is-picked');
+    output.textContent = card.querySelector('.name').textContent;
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+</script>
+</body>
+</html>

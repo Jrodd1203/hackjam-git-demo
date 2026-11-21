@@ -1,0 +1,9 @@
+title: "HackJam '26 Contributor Wall"
+
+collections:
+  contributors:
+    output: false
+
+exclude:
+  - README.md
+  - .gitignore
